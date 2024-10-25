@@ -1,0 +1,120 @@
+/* Profile Section */
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #263043; /* Adjust background if necessary */
+  border-bottom: 1px solid #ccc; /* Optional separator */
+}
+
+.profile-photo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.profile-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #c6c2c2; /* Adjust text color */
+}
+
+.profile-options {
+  margin-top: 10px;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.button-row button {
+  padding: 8px 16px;
+  cursor: pointer;
+  background-color: #FFAC1C; /* Button color */
+  border: none;
+  border-radius: 5px;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.button-row button:hover {
+  background-color: #e0960d; /* Slightly darker on hover */
+}
+
+.upload-btn {
+  background-color: #FFAC1C;
+  padding: 8px 16px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.upload-btn:hover {
+  background-color: #e0960d;
+}
+
+/* Sidebar List Styles */
+.sidebar-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar-list-item {
+  margin: 10px 0;
+}
+
+.sidebar-list-item a {
+  text-decoration: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-list-item .icon {
+  font-size: 1.2rem;
+  color:#FFA500;
+}
+
+
+
+
+/* //2024/10/2 */
+
+.options-icon {
+  position: absolute;
+  top: 10px;
+  left: 10px; /* Positioned in the upper left corner */
+  font-size: 24px;
+  cursor: pointer;
+  color: #FFA500;
+}
+.dropdown-menu p {
+  margin: 0;
+  padding: 10px;
+  color: rgb(200, 169, 46);
+  cursor: pointer;
+}
+
+.dropdown-menu p:hover {
+  background-color: #444;
+  border-radius: 10px;
+
+}
+.upload-button {
+  margin-top: 15px;
+  padding: 8px 12px;
+  background-color: #ffa600b8;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}

@@ -1,0 +1,100 @@
+.item-card-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows cards to wrap onto the next line */
+    gap: 20px; /* Space between cards */
+    margin-top: 20px; /* Margin above the card container */
+  }
+  
+  .item-card {
+    background-color: #f9f9f9; /* Light background for cards */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Padding inside the card */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    flex: 1 1 300px; /* Allow cards to grow and shrink, with a base width of 300px */
+    transition: transform 0.2s; /* Animation on hover */
+    margin-bottom: 10px;
+  }
+  
+  .item-card:hover {
+    transform: translateY(-5px); /* Raise card on hover */
+  }
+  .item-form {
+    background-color: #fefefe; /* Light background for the form */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding inside the form */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    max-width: 500px; /* Maximum width for the form */
+    margin: 20px auto; /* Center the form */
+  }
+  
+  .form-group {
+    margin-bottom: 15px; /* Space between form fields */
+  }
+  
+  label {
+    display: block; /* Block display for labels */
+    margin-bottom: 5px; /* Space between label and input */
+    font-weight: bold; /* Bold labels */
+    color: #333; /* Dark color for text */
+  }
+  
+  input[type="date"],
+  input[type="time"],
+  textarea {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding inside inputs */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 4px; /* Rounded corners */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Inner shadow */
+    transition: border-color 0.3s; /* Transition for border color */
+  }
+  
+  input[type="date"]:focus,
+  input[type="time"]:focus,
+  textarea:focus {
+    border-color: #ffa500; /* Highlight border on focus */
+    outline: none; /* Remove outline */
+  }
+  
+  textarea {
+    resize: none; /* Disable resizing */
+  }
+  
+  .radio-group {
+    margin: 10px 0; /* Space around radio buttons */
+  }
+  
+  .submit-button {
+    background-color: #ffa500; /* Main color for the button */
+    color: white; /* Text color */
+    padding: 10px 15px; /* Padding for button */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    font-size: 16px; /* Font size */
+    transition: background-color 0.3s; /* Transition for background color */
+  }
+  
+  .submit-button:hover {
+    background-color: #e69500; /* Darker shade on hover */
+  }
+ 
+  .clear-button
+  {
+    color: red;
+    margin-top: 10px;
+    margin-left: 1300px;
+   
+   
+   
+
+  }
+  .delete-button
+  {
+    color: red;
+    margin-top: 10px;
+    margin-left: 1300px;
+   
+  }

@@ -1,0 +1,178 @@
+/* Container Styles */
+.register-container {
+    min-height: 100vh;
+    background-color: #3c454b; /* White background to match login page */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Main Area Styles */
+.register-main {
+    background: #f5f5f5; /* Light grey background to complement the white container */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Card Styles */
+.register-card {
+    width: 100%;
+    max-width: 360px; /* Consistent with login page */
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    background: #ffffff; /* White background for the card */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Header Styles */
+.register-header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.register-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333; /* Dark text color for better readability */
+}
+
+.register-title-green {
+    color: #199d19; /* Same green as login page */
+}
+
+.register-title-orange {
+    color: #FFA500; /* Same orange as login page */
+}
+
+.register-subtitle {
+    color: #555; /* Darker gray for subtitle */
+    margin-top: 0.25rem;
+    font-size: 20px;
+}
+
+/* Form Styles */
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Label Styles */
+.register-label {
+    font-size: 0.875rem;
+    color: #555; /* Darker color for labels */
+    font-weight: 600;
+}
+
+/* Input Styles */
+.register-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+    border-radius: 0.5rem;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+.register-input:focus {
+    border-color: #4f46e5;
+    background-color: #f9f9f9;
+    outline: none;
+}
+
+/* Error Message Styles */
+.register-error {
+    color: #f87171; /* Same red as login page */
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Button Styles */
+.register-submit-btn {
+    width: 100%;
+    padding: 0.75rem;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    background: #4f46e5; /* Same blue as login page */
+    border: none;
+    position: relative;
+}
+
+.register-submit-btn:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.register-submit-btn:hover:after {
+    opacity: 1;
+}
+
+.register-submit-btn.active {
+    background: #4338ca; /* Darker blue on active */
+}
+
+.register-submit-btn.disabled {
+    background-color: #d1d5db; /* Same gray as login page */
+    cursor: not-allowed;
+}
+
+/* Signup Text Styles */
+.register-signup-text {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #555; /* Consistent color with login page */
+    margin-top: 1rem; /* Spacing above the signup text */
+}
+
+.register-signup-link {
+    color: #4f46e5; /* Same blue as login page */
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.register-signup-link:hover {
+    text-decoration: underline;
+}
+
+/* Divider Styles */
+.register-divider {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    margin: 1rem 0; /* Consistent margin with login page */
+}
+
+.register-divider-line {
+    border-bottom: 2px solid #ddd;
+    width: 100%;
+    margin: 0 0.5rem;
+}
+
+.register-divider-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #555; /* Consistent color with login page */
+    position: relative;
+    z-index: 1;
+    background: #ffffff; /* White background for text */
+    padding: 0 0.5rem;
+}
