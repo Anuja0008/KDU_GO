@@ -64,7 +64,6 @@ const StudentDetails = () => {
               <th style={styles.th}>Full Name</th>
               <th style={styles.th}>Email</th>
               <th style={styles.th}>Phone Number</th>
-              {/* <th style={styles.th}>Password</th> */}
               <th style={styles.th}>Role</th>
               <th style={styles.th}>Actions</th> {/* New Actions column */}
             </tr>
@@ -77,7 +76,6 @@ const StudentDetails = () => {
                   <td style={styles.td}>{student.fullName}</td>
                   <td style={styles.td}>{student.email}</td>
                   <td style={styles.td}>{student.phoneNumber}</td>
-                  {/* <td style={styles.td}>{student.password}</td> Show password */}
                   <td style={styles.td}>{student.role}</td>
                   <td style={styles.td}>
                     <FaTrashAlt 
@@ -115,6 +113,7 @@ const styles = {
     width: '100%',
     position: 'fixed',
     left: 0,
+    top: 0,
     textAlign: 'center',
     backgroundColor: '#263043',
     padding: '15px',
@@ -138,7 +137,8 @@ const styles = {
   mainContent: {
     flex: 1,
     padding: '20px',
-    marginTop: '60px',
+    marginTop: '80px', // Increased margin to make room for the fixed header
+    overflowY: 'auto', // Make content scrollable
   },
   table: {
     width: '100%',

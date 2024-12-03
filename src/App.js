@@ -22,6 +22,8 @@ import Email from './components/childpage_1/email-info';
 import QR from './components/childpage_1/qr';
 import LecturerView from './components/childpage_1/view-lectures';
 import PasswordReset from './components/childpage_1/password-reset ';
+import Book from './components/childpage_1/Rollover-Book';
+import FinalBook from './components/childpage_1/finalbook';
 
 
 function App() {
@@ -112,6 +114,14 @@ function App() {
     {
       path: "/childpage_1/view-lectures",
       element: <LecturerView/>, 
+    },
+    {
+      path: "/childpage_1/Rollover-Book",
+      element: <Book/>, 
+    },
+    {
+      path: "/childpage_1/finalbook",
+      element: <FinalBook/>, 
     },
   
     {

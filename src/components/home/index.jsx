@@ -99,10 +99,10 @@ function Home() {
 
   // Sample chart data
   const data = [
-    { name: '1st week', Lectures: 1000, Students: 1000, amt: 1000 },
-    { name: '2nd Week', Lectures: 1000, Students: 1398, amt: 1000 },
-    { name: '3rd Week', Lectures: 1000, Students: 1800, amt: 1000 },
-    { name: '4th Week', Lectures: 1000, Students: 800, amt: 1000 },
+    { name: '1st week', Lectures: "", Students: "", amt: "" },
+    { name: '2nd Week', Lectures: "", Students: "", amt: "" },
+    { name: '3rd Week', Lectures: "", Students: "", amt: "" },
+    { name: '4th Week', Lectures: "", Students: "", amt: "" },
   ];
 
   return (

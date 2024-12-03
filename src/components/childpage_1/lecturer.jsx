@@ -189,39 +189,53 @@ const Lecturer = () => {
                   />
                 </div>
                 <div style={{ flex: "1 1 45%", marginBottom: "15px", paddingRight: "10px" }}>
-                  <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>Department:</label>
-                  <input
-                    type="text"
-                    value={department}
-                    onChange={(e) => setDepartment(e.target.value)}
-                    required
-                    style={{
-                      width: "100%",
-                      padding: "10px",
-                      borderRadius: "4px",
-                      border: "1px solid #ccc",
-                      fontSize: "16px",
-                    }}
-                    placeholder="Enter department"
-                  />
-                </div>
+  <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>Department:</label>
+  <select
+    value={department}
+    onChange={(e) => setDepartment(e.target.value)}
+    required
+    style={{
+      width: "100%",
+      padding: "10px",
+      borderRadius: "4px",
+      border: "1px solid #ccc",
+      fontSize: "16px",
+    }}
+  >
+    <option value="" disabled>Select department</option>
+    <option value="Computer Science">Computer Science</option>
+    <option value="Mechanical Engineering">Mechanical Engineering</option>
+    <option value="Electrical Engineering">Electrical Engineering</option>
+    <option value="Civil Engineering">Civil Engineering</option>
+    <option value="Business Administration">Business Administration</option>
+    {/* Add other departments as needed */}
+  </select>
+</div>
+
                 <div style={{ flex: "1 1 45%", marginBottom: "15px", paddingRight: "10px" }}>
-                  <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>Phone Number:</label>
-                  <input
-                    type="text"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    required
-                    style={{
-                      width: "100%",
-                      padding: "10px",
-                      borderRadius: "4px",
-                      border: "1px solid #ccc",
-                      fontSize: "16px",
-                    }}
-                    placeholder="Enter phone number"
-                  />
-                </div>
+  <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>Phone Number:</label>
+  <input
+    type="text"
+    value={phoneNumber}
+    onChange={(e) => {
+      // Ensure phone number is not longer than 10 characters
+      if (e.target.value.length <= 10) {
+        setPhoneNumber(e.target.value);
+      }
+    }}
+    required
+    maxLength="10"
+    style={{
+      width: "100%",
+      padding: "10px",
+      borderRadius: "4px",
+      border: "1px solid #ccc",
+      fontSize: "16px",
+    }}
+    placeholder="Enter phone number"
+  />
+</div>
+
                 <div style={{ flex: "1 1 45%", marginBottom: "15px", paddingRight: "10px" }}>
                   <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>Gender:</label>
                   <select
