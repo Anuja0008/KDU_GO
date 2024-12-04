@@ -172,7 +172,7 @@ const Book = () => {
         </button>
       </div>
 
-      {isUpdated && <p style={styles.successMessage}>Reservation updated in UI only!</p>}
+      {isUpdated && <p style={styles.successMessage}>Reservation updated!</p>}
       {isDeleted && <p style={styles.successMessage}>Reservation deleted successfully!</p>}
     </div>
   );

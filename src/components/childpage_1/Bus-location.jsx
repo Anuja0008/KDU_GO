@@ -39,7 +39,7 @@ const BusLocation = () => {
                         } else {
                             setLocation(prevState => ({
                                 ...prevState,
-                                name: "Location not found"
+                                name: "" // Set it as an empty string if location is not found
                             }));
                         }
                     })
@@ -47,7 +47,7 @@ const BusLocation = () => {
                         console.error('Error fetching location name:', error);
                         setLocation(prevState => ({
                             ...prevState,
-                            name: "Error fetching location"
+                            name: "" // Set it as an empty string if there's an error
                         }));
                     });
             });
@@ -70,24 +70,28 @@ const BusLocation = () => {
                 <main style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
                     {location.latitude && location.longitude ? (
                         <>
-                            {/* Card to Display Location Name */}
+                            {/* Attractive Card to Display Location Name */}
                             <div style={{
                                 border: '1px solid #ccc',
-                                borderRadius: '8px',
-                                padding: '20px',
-                                marginBottom: '20px',
+                                borderRadius: '16px',
+                                padding: '30px',
+                                marginBottom: '30px',
                                 textAlign: 'center',
-                                background: '#f9f9f9'
+                                background: 'linear-gradient(135deg, #f9f9f9, #dcdcdc)',
+                                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                                maxWidth: '400px',
+                                width: '100%',
+                                transition: 'all 0.3s ease-in-out',
                             }}>
-                                <h2>{location.name || "Fetching Location..."}</h2>
-                                <p>Latitude: {location.latitude}</p>
-                                <p>Longitude: {location.longitude}</p>
+                                <h2 style={{ fontSize: '24px', color: '#333', fontWeight: '500' }}>{location.name || "Fetching Location..."}</h2>
+                                <p style={{ fontSize: '18px', color: '#666', marginTop: '10px' }}>Latitude: {location.latitude}</p>
+                                <p style={{ fontSize: '18px', color: '#666' }}>Longitude: {location.longitude}</p>
                             </div>
                             
                             {/* Google Map */}
                             <LoadScript googleMapsApiKey={googleMapsApiKey}>
                                 <GoogleMap
-                                    mapContainerStyle={{ height: "400px", width: "100%" }}
+                                    mapContainerStyle={{ height: "400px", width: "100%", borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
                                     center={{ lat: location.latitude, lng: location.longitude }}
                                     zoom={15}
                                 >
@@ -96,12 +100,12 @@ const BusLocation = () => {
                             </LoadScript>
                         </>
                     ) : (
-                        <h2>Loading...</h2>
+                        <h2 style={{ fontSize: '24px', color: '#555' }}>Loading...</h2> // Display loading state while the location is being fetched
                     )}
                 </main>
 
-                {/* Footer
-                <footer style={{ padding: '10px', background: '#263043', textAlign: 'center' }}>
+                {/* Footer */}
+                {/* <footer style={{ padding: '10px', background: '#263043', textAlign: 'center' }}>
                     <p>© 2024 Your Company Name</p>
                 </footer> */}
             </div>

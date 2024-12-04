@@ -93,8 +93,8 @@ const Email = () => {
                     <>
                       <strong>Notice:</strong> {email.notice} <br />
                       <strong>Receiver:</strong> {email.receiver} <br />
-                      <strong>Sender:</strong> {email.sender} <br />
-                      <strong>Date:</strong> {email.time_date}
+                      {/* <strong>Sender:</strong> {email.sender} <br />
+                      <strong>Date:</strong> {email.time_date} */}
                     </>
                   )}
                 </li>

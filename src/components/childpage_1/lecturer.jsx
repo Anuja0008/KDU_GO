@@ -172,7 +172,7 @@ const Lecturer = () => {
                   />
                 </div>
                 <div style={{ flex: "1 1 45%", marginBottom: "15px", paddingRight: "10px" }}>
-                  <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>Enrollment Number:</label>
+                  <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>EPF Number:</label>
                   <input
                     type="text"
                     value={enrollmentNum}
@@ -203,11 +203,11 @@ const Lecturer = () => {
     }}
   >
     <option value="" disabled>Select department</option>
-    <option value="Computer Science">Computer Science</option>
-    <option value="Mechanical Engineering">Mechanical Engineering</option>
-    <option value="Electrical Engineering">Electrical Engineering</option>
-    <option value="Civil Engineering">Civil Engineering</option>
-    <option value="Business Administration">Business Administration</option>
+    <option value="Computer Science">Faculty Of Computing</option>
+    <option value="Mechanical Engineering">Faculty of social Sciences and Build Environment</option>
+    <option value="Electrical Engineering">Faculty of Management </option>
+    <option value="Civil Engineering">Faculty of Law</option>
+    <option value="Business Administration">Faculty of Medicine</option>
     {/* Add other departments as needed */}
   </select>
 </div>

@@ -5,6 +5,7 @@ import { db } from '../../firebase/firebase'; // Import Firestore instance
 
 function QR() {
   const [reservations, setReservations] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(''); // State to hold search query
 
   // Fetch reservations data from Firestore
   useEffect(() => {
@@ -13,7 +14,7 @@ function QR() {
         const reservationsRef = collection(db, 'reservations');
         const q = query(reservationsRef, where('checked', '==', true)); // Query for checked reservations
         const querySnapshot = await getDocs(q);
-        
+
         const fetchedReservations = [];
         for (const doc of querySnapshot.docs) {
           const reservationData = { id: doc.id, ...doc.data() };
@@ -42,6 +43,16 @@ function QR() {
 
     fetchReservations();
   }, []);
+
+  // Handle search input change
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
+
+  // Filter reservations by email based on search query
+  const filteredReservations = reservations.filter((reservation) =>
+    reservation.email.toLowerCase().includes(searchQuery)
+  );
 
   // Inline CSS styles for the full layout
   const layoutStyle = {
@@ -106,40 +117,44 @@ function QR() {
       <div style={contentStyle}>
         {/* Seat Checking Heading */}
         <h1 style={headingStyle}>Seat Checking</h1>
-        
+
         {/* Divider */}
         <div style={dividerStyle}></div>
+
+        {/* Search Box */}
+        <input
+          type="text"
+          placeholder="Search by email"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          style={{ padding: '10px', marginBottom: '20px', width: '100%', borderRadius: '4px', border: '1px solid #ddd' }}
+        />
 
         {/* Reservations Table */}
         <table style={tableStyle}>
           <thead>
             <tr>
-            <th style={thStyle}>Enrollment Number</th> {/* New column for Enrollment Number */}
+              <th style={thStyle}>Enrollment Number</th>
               <th style={thStyle}>Full Name</th>
               <th style={thStyle}>Email</th>
               <th style={thStyle}>Destination</th>
               <th style={thStyle}>Seat ID</th>
               <th style={thStyle}>Date</th>
               <th style={thStyle}>Seat Status</th>
-             
             </tr>
           </thead>
           <tbody>
-            {reservations.length > 0 ? (
-              reservations.map((reservation) => {
+            {filteredReservations.length > 0 ? (
+              filteredReservations.map((reservation) => {
                 // Check if reservation.date is a Firestore timestamp
                 const reservationDate = reservation.date ? new Date(reservation.date.seconds * 1000) : new Date();
-                
-                // Logging the date for debugging
-                console.log('Reservation Date:', reservationDate);
 
                 return (
                   <tr key={reservation.id}>
-                       <td style={tdStyle}>{reservation.enrollmentNum || 'N/A'}</td> {/* Display enrollmentNum or N/A */}
+                    <td style={tdStyle}>{reservation.enrollmentNum || 'N/A'}</td>
                     <td style={tdStyle}>{reservation.fullName}</td>
                     <td style={tdStyle}>{reservation.email}</td>
                     <td style={tdStyle}>{reservation.destination}</td>
-                    
                     <td style={tdStyle}>{reservation.seatId}</td>
                     <td style={tdStyle}>
                       {new Intl.DateTimeFormat('en-US', {
@@ -149,14 +164,13 @@ function QR() {
                         hour12: true,
                       }).format(reservationDate)}
                     </td>
-                    <td style={tdStyle}>{reservation.checked ? 'Used' : 'Not Used'}</td> {/* Show "Used" if checked is true */}
-                 
+                    <td style={tdStyle}>{reservation.checked ? 'Used' : 'Not Used'}</td>
                   </tr>
                 );
               })
             ) : (
               <tr>
-                <td colSpan="7" style={tdStyle}>No reservations found.</td> {/* Updated colspan to 7 */}
+                <td colSpan="7" style={tdStyle}>No reservations found.</td>
               </tr>
             )}
           </tbody>

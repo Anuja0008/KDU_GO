@@ -4,7 +4,7 @@ import { db } from '../../firebase/firebase';
 import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
 import { jsPDF } from 'jspdf';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { BsFillArchiveFill, BsFillTelephoneFill, BsInfoCircleFill } from 'react-icons/bs';
+import { BsFillArchiveFill, BsFillTelephoneFill, BsInfoCircleFill,BsCalendarWeek,BsQrCodeScan } from 'react-icons/bs';
 import { FaHome, FaMapMarkerAlt, FaBell } from 'react-icons/fa';
 
 const TOTAL_SEAT_COUNT = 45;
@@ -159,6 +159,9 @@ const SeatReservation = () => {
           <BsFillArchiveFill onClick={() => navigate('/childpage_1/center-details')} style={{ fontSize: '28px', cursor: 'pointer', transition: 'color 0.3s', color: '#fff' }} />
           <BsFillTelephoneFill onClick={() => navigate('/childpage_1/Details')} style={{ fontSize: '28px', cursor: 'pointer', transition: 'color 0.3s', color: '#fff' }} />
           <BsInfoCircleFill onClick={() => navigate('/childpage_1/About')} style={{ fontSize: '28px', cursor: 'pointer', transition: 'color 0.3s', color: '#fff' }} />
+          <BsCalendarWeek onClick={() => navigate('/childpage_1/Rollover')} style={{ fontSize: '28px', cursor: 'pointer', transition: 'color 0.3s', color: '#fff' }} />
+          <BsQrCodeScan  onClick={() => navigate('/childpage_1/Qr')} style={{ fontSize: '28px', cursor: 'pointer', transition: 'color 0.3s', color: '#fff' }} />
+               
         </div>
       </header>
       <main style={{ flexGrow: 1, padding: '30px', display: 'flex', alignItems: 'flex-start' }}>

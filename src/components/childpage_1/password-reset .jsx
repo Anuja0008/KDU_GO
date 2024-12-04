@@ -6,8 +6,10 @@ import emailjs from 'emailjs-com'; // Import EmailJS
 
 const PasswordReset = () => {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]); // State to store filtered users
   const [emailStatus, setEmailStatus] = useState(null); // State for email sending status
   const [updatedUsers, setUpdatedUsers] = useState({}); // Track which users have been updated
+  const [searchTerm, setSearchTerm] = useState(''); // State for search term
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -18,6 +20,7 @@ const PasswordReset = () => {
           .map(doc => ({ id: doc.id, ...doc.data() }))
           .filter(user => user.role === 'lecturer'); // Filter to get only lecturers
         setUsers(userList);
+        setFilteredUsers(userList); // Initialize filtered users with all users
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -25,6 +28,19 @@ const PasswordReset = () => {
 
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    // Filter users based on the search term
+    if (searchTerm) {
+      setFilteredUsers(
+        users.filter(user =>
+          user.email.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredUsers(users); // If no search term, show all users
+    }
+  }, [searchTerm, users]);
 
   const handleUpdate = async (id, field, value) => {
     try {
@@ -75,13 +91,28 @@ const PasswordReset = () => {
         <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '10px', textAlign: 'center' }}>
           Password Management
         </h2>
-        <hr style={{ margin: '10px 0', border: '3px solid #FFA500',marginBottom:'10px' }} /> {/* Separator bar */}
+        <hr style={{ margin: '10px 0', border: '3px solid #FFA500', marginBottom: '10px' }} /> {/* Separator bar */}
         
         {emailStatus && (
           <div style={{ marginBottom: '20px', color: emailStatus.includes('successfully') ? 'green' : 'red' }}>
             {emailStatus} {/* Display the email sending status */}
           </div>
         )}
+
+        {/* Search Bar */}
+        <input
+          type="text"
+          placeholder="Search by email"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            padding: '10px',
+            marginBottom: '20px',
+            width: '100%',
+            border: '1px solid #ccc',
+            borderRadius: '4px'
+          }}
+        />
 
         <div style={{ width: '100%', overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -96,7 +127,7 @@ const PasswordReset = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map(user => (
+              {filteredUsers.map(user => (
                 <tr key={user.id}>
                   <td style={{ border: '1px solid #131413', padding: '8px' }}>
                     <span>{user.enrollmentNum}</span> {/* Non-editable Enrollment Number */}

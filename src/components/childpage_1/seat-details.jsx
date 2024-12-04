@@ -101,7 +101,7 @@ const SeatDetails = () => {
     email: '',
     phoneNumber: '',
     enrollmentNum: '',
-    journeyType: 'One Way',
+    journeyType: 'From Campus',
     destination: '',
     role: 'Student',
     travelDate1: '', // First travel date for booking
@@ -447,15 +447,17 @@ const SeatDetails = () => {
             onChange={handleChange}
             required
           />
-          <label style={labelStyle}>Phone Number:</label>
-          <input
-            type="text"
-            name="phoneNumber"
-            style={inputStyle}
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            required
-          />
+      <label style={labelStyle}>Phone Number:</label>
+<input
+  type="tel"
+  name="phoneNumber"
+  style={inputStyle}
+  value={formData.phoneNumber}
+  onChange={handleChange}
+  required
+  maxLength={10}  // Ensures the input has a maximum of 10 characters
+/>
+
           <label style={labelStyle}>Enrollment Number:</label>
           <input
             type="text"
@@ -473,8 +475,9 @@ const SeatDetails = () => {
             onChange={handleChange}
             required
           >
-            <option value="One Way">One Way</option>
-            <option value="Round Trip">Round Trip</option>
+            <option value="One Way">From Campus</option>
+            <option value="Round Trip">To Campus</option>
+            <option value="Round Trip">Both Up and Down</option>
           </select>
           <label style={labelStyle}>Destination:</label>
           <select
@@ -521,7 +524,7 @@ const SeatDetails = () => {
             style={inputStyle}
             value={formData.travelDate2}
             onChange={handleDateInput}
-            required
+            // required
           />
           <button style={submitButtonStyle} type="submit">
             Book Seat

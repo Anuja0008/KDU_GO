@@ -3,13 +3,12 @@ import { db } from "../../firebase/firebase";
 import { collection, getDocs, deleteDoc, doc, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
-const MessageCard = ({ message, onNavigate }) => {
+const MessageCard = ({ message, onNavigate, onDelete }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    // Remove time part
     return `${year}-${month}-${day}`;
   };
 
@@ -59,6 +58,28 @@ const MessageCard = ({ message, onNavigate }) => {
       <p style={{ margin: "5px 0", fontWeight: "bold", color: "#555" }}>
         Revised Date: <span style={{ fontWeight: "normal" }}>{formatDate(message.date)}</span>
       </p>
+      <p style={{ margin: "5px 0", fontWeight: "bold", color: "#555" }}>
+        Seat State: <span style={{ fontWeight: "normal", color: message.checked ? 'green' : 'red' }}>
+          {message.checked ? "Checked" : "Not Checked"}
+        </span>
+      </p>
+
+      {/* Cross Button to Delete */}
+      <button
+        onClick={() => onDelete(message.id)}
+        style={{
+          position: "absolute",
+          bottom: "10px",
+          right: "10px",
+          backgroundColor: "transparent",
+          border: "none",
+          fontSize: "20px",
+          color: "#dc3545",
+          cursor: "pointer",
+        }}
+      >
+        &times;
+      </button>
     </div>
   );
 };
@@ -77,6 +98,7 @@ const ROLLOVER = () => {
           querySnapshot.docs.map(async (docSnapshot) => {
             const messageData = docSnapshot.data();
             let destination = "Unknown";
+            let checked = false;  // Default to false if not found
 
             try {
               const reservationQuery = query(
@@ -90,6 +112,9 @@ const ROLLOVER = () => {
                 if (reservationDoc.data().destination) {
                   destination = reservationDoc.data().destination;
                 }
+                if (reservationDoc.data().checked !== undefined) {
+                  checked = reservationDoc.data().checked;  // Get the checked status
+                }
               }
             } catch (error) {
               console.error(`Error fetching destination for email ${messageData.email}:`, error);
@@ -99,6 +124,7 @@ const ROLLOVER = () => {
               id: docSnapshot.id,
               ...messageData,
               destination,
+              checked,  // Include seat state in the message object
             };
           })
         );
@@ -121,6 +147,20 @@ const ROLLOVER = () => {
         date,
       },
     });
+  };
+
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this message?");
+    if (!confirmDelete) return;
+
+    try {
+      await deleteDoc(doc(db, "TicketRollover", id));
+      setMessages(messages.filter((message) => message.id !== id));
+      alert("Message deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      alert("Failed to delete message.");
+    }
   };
 
   const clearMessages = async () => {
@@ -178,6 +218,7 @@ const ROLLOVER = () => {
                   key={message.id}
                   message={message}
                   onNavigate={handleNavigate}
+                  onDelete={handleDelete}
                 />
               ))}
             </div>
