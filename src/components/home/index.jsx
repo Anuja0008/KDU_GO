@@ -1,35 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { /*Link*/ useNavigate } from 'react-router-dom'; // Import Link and useNavigate
+import { useNavigate } from 'react-router-dom';
 import './profile.css';
-import { 
-  BsFillArchiveFill, 
-  BsFillGrid3X3GapFill, 
-  BsPeopleFill, 
-  BsFillBellFill 
+import {
+  BsFillArchiveFill,
+  BsFillGrid3X3GapFill,
+  BsPeopleFill,
+  BsFillBellFill,
+  BsFillPersonFill,
 } from 'react-icons/bs';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
-  ResponsiveContainer, 
-  LineChart, 
-  Line 
-} from 'recharts';
-import { db } from '../../firebase/firebase'; // Import the Firestore database instance
+import { db } from '../../firebase/firebase';
 import { collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
+import BusLocation from '../childpage_1/Bus-location';  // Import the BusLocation component
 
 function Home() {
   const [seatReservations, setSeatReservations] = useState([]);
   const [availableSeats, setAvailableSeats] = useState(0);
-  const [userCount, setUserCount] = useState(0); // Live user count
-  const [reservedSeats, setReservedSeats] = useState(0); // Reserved seats count
-  const [latestRollover, setLatestRollover] = useState(null); // Latest rollover alert
-  const totalSeats = 45; // Total number of seats
-  const navigate = useNavigate(); // Use navigate hook for navigation
+  const [userCount, setUserCount] = useState(0);
+  const [reservedSeats, setReservedSeats] = useState(0);
+  const [latestRollover, setLatestRollover] = useState(null);
+  const [lecturerCount, setLecturerCount] = useState(0);
+  const [studentCount, setStudentCount] = useState(0);
+  const totalSeats = 45;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -39,8 +31,10 @@ function Home() {
 
       const reservations = querySnapshot.docs.map((doc) => {
         const data = doc.data();
-        const travelDate = data.travelDate ? new Date(data.travelDate.seconds * 1000).toLocaleDateString() : 'N/A';
-        
+        const travelDate = data.travelDate
+          ? new Date(data.travelDate.seconds * 1000).toLocaleDateString()
+          : 'N/A';
+
         return {
           id: doc.id,
           seatNumber: data.seatId || 'N/A',
@@ -48,38 +42,53 @@ function Home() {
           fullName: data.fullName || 'N/A',
           email: data.email || 'N/A',
           phoneNumber: data.phoneNumber || 'N/A',
-          // role: data.role || 'N/A',
-          travelDate: travelDate, // Format the date here
+          travelDate,
         };
       });
 
       setSeatReservations(reservations);
       calculateAvailableSeats(reservations.length);
-      setReservedSeats(reservations.length); // Set reserved seat count
+      setReservedSeats(reservations.length);
     };
 
     const fetchUserCount = async () => {
       const usersCollection = collection(db, 'userdata');
       const querySnapshot = await getDocs(usersCollection);
-      setUserCount(querySnapshot.size); // Set live user count
+      setUserCount(querySnapshot.size);
+    };
+
+    const fetchLecturerCount = async () => {
+      const usersCollection = collection(db, 'userdata');
+      const q = query(usersCollection, where('role', '==', 'lecturer'));
+      const querySnapshot = await getDocs(q);
+      setLecturerCount(querySnapshot.size);
+    };
+
+    const fetchStudentCount = async () => {
+      const usersCollection = collection(db, 'userdata');
+      const q = query(usersCollection, where('role', '==', 'student'));
+      const querySnapshot = await getDocs(q);
+      setStudentCount(querySnapshot.size);
     };
 
     const fetchLatestRollover = async () => {
       const rolloverCollection = collection(db, 'TicketRollover');
-      const q = query(rolloverCollection, orderBy('date', 'desc'), limit(1)); // Get latest entry by date
+      const q = query(rolloverCollection, orderBy('date', 'desc'), limit(1));
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
         const latestDoc = querySnapshot.docs[0].data();
         const seatNo = latestDoc.seatNo;
-        const rolloverDate = new Date(latestDoc.date.seconds * 1000).toLocaleDateString(); // Format date
+        const rolloverDate = new Date(latestDoc.date.seconds * 1000).toLocaleDateString();
 
-        setLatestRollover({ seatNo, rolloverDate }); // Set latest rollover data
+        setLatestRollover({ seatNo, rolloverDate });
       }
     };
 
     fetchReservations();
     fetchUserCount();
+    fetchLecturerCount();
+    fetchStudentCount();
     fetchLatestRollover();
   }, []);
 
@@ -89,152 +98,115 @@ function Home() {
 
   const handleRolloverClick = () => {
     if (latestRollover) {
-      navigate(`/childpage_1/seat-details/${latestRollover.seatNo}`); // Navigate to seat details page
+      navigate(`/childpage_1/seat-details/${latestRollover.seatNo}`);
     }
   };
 
   const handleNavigation = (path) => {
-    navigate(path); // Function for navigating to specified path
+    navigate(path);
   };
 
-  // Sample chart data
-  const data = [
-    { name: '1st week', Lectures: "", Students: "", amt: "" },
-    { name: '2nd Week', Lectures: "", Students: "", amt: "" },
-    { name: '3rd Week', Lectures: "", Students: "", amt: "" },
-    { name: '4th Week', Lectures: "", Students: "", amt: "" },
-  ];
-
   return (
-    <main className='main-container'>
-      <div className='main-title'>
-        <h3 className='Dashboard'>Hello Admin</h3>
+    <main className="main-container">
+      <div className="main-title">
+        <h3 className="Dashboard">Hello Admin</h3>
       </div>
 
-      <div className='main-cards'>
-        <div className='card' onClick={() => handleNavigation('/childpage_1/seat-reservation')}>
-          <div className='card-inner'>
+      <div className="main-cards">
+        {/* Cards for available seats, reserved seats, etc. */}
+        <div className="card" onClick={() => handleNavigation('/childpage_1/seat-reservation')}>
+          <div className="card-inner">
             <h3>Seats Available</h3>
-            <BsFillArchiveFill className='card_icon' />
+            <BsFillArchiveFill className="card_icon" />
           </div>
-          <h1>{availableSeats}</h1> {/* Display available seat count */}
+          <h1>{availableSeats}</h1>
         </div>
 
-        <div className='card' onClick={() => handleNavigation('/childpage_1/seat-reservation')}>
-          <div className='card-inner'>
+        <div className="card" onClick={() => handleNavigation('/childpage_1/seat-reservation')}>
+          <div className="card-inner">
             <h3>Reserved Seats</h3>
-            <BsFillGrid3X3GapFill className='card_icon' />
+            <BsFillGrid3X3GapFill className="card_icon" />
           </div>
-          <h1>{reservedSeats}</h1> {/* Display reserved seat count */}
+          <h1>{reservedSeats}</h1>
         </div>
 
-        <div className='card' onClick={() => handleNavigation('/childpage_1/student-details')}>
-          <div className='card-inner'>
+        <div className="card" onClick={() => handleNavigation('/childpage_1/student-details')}>
+          <div className="card-inner">
             <h3>Active Users</h3>
-            <BsPeopleFill className='card_icon' />
+            <BsPeopleFill className="card_icon" />
           </div>
-          <h1>{userCount}</h1> {/* Display live user count */}
+          <h1>{userCount}</h1>
         </div>
 
-        <div className='card' onClick={handleRolloverClick} style={{ cursor: 'pointer' }}> {/* Clickable for navigation */}
-          <div className='card-inner'>
+        <div className="card" onClick={handleRolloverClick} style={{ cursor: 'pointer' }}>
+          <div className="card-inner">
             <h3>Rollover Request</h3>
-            <BsFillBellFill className='card_icon' />
+            <BsFillBellFill className="card_icon" />
           </div>
           {latestRollover ? (
-            <h1>{`Seat: ${latestRollover.seatNo}`}</h1> // Display latest rollover seat number
+            <h1>{`Seat: ${latestRollover.seatNo}`}</h1>
           ) : (
             <h1>No Alerts</h1>
           )}
         </div>
+
+        <div className="card">
+          <div className="card-inner">
+            <h3>Number of Lecturers</h3>
+            <BsFillPersonFill className="card_icon" />
+          </div>
+          <h1>{lecturerCount}</h1>
+        </div>
+
+        <div className="card">
+          <div className="card-inner">
+            <h3>Number of Students</h3>
+            <BsFillPersonFill className="card_icon" />
+          </div>
+          <h1>{studentCount}</h1>
+        </div>
       </div>
 
-      <div className='divider'></div> {/* Divider added here */}
+      <div className="divider"></div>
 
-      <div className='charts'>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart
-            data={data}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="Lectures" fill="#FFA500" />
-            <Bar dataKey="Students" fill="#1f536b" />
-          </BarChart>
-        </ResponsiveContainer>
-
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart
-            data={data}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="Lectures" stroke="#FFA550" activeDot={{ r: 8 }} />
-            <Line type="monotone" dataKey="Students" stroke="#1f536b" />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-
-      <div className='divider'></div> {/* Divider added here */}
-
-      <div className='reservations-table'>
+      <div className="reservations-table">
         <h3>Seat Reservations</h3>
         <table>
           <thead>
             <tr>
-            <th>Full Name</th>
-            <th>Email</th>
+              <th>Full Name</th>
+              <th>Email</th>
               <th>Phone Number</th>
               <th>Seat Number</th>
               <th>Destination</th>
               <th>Travel Date</th>
-         
-              {/* <th>Status</th> */}
-            
             </tr>
           </thead>
           <tbody>
             {seatReservations.length > 0 ? (
               seatReservations.map((reservation) => (
                 <tr key={reservation.id}>
-                    <td>{reservation.fullName}</td>
-                    <td>{reservation.email}</td>
-                    <td>{reservation.phoneNumber}</td>
+                  <td>{reservation.fullName}</td>
+                  <td>{reservation.email}</td>
+                  <td>{reservation.phoneNumber}</td>
                   <td>{reservation.seatNumber}</td>
                   <td>{reservation.destination}</td>
                   <td>{reservation.travelDate}</td>
-                
-               
-                  
-                  {/* <td>{reservation.role}</td> */}
-                   {/* Display formatted travel date */}
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="7">No reservations found</td> {/* Updated colSpan to match the number of columns */}
+                <td colSpan="6">No reservations found</td>
               </tr>
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Integrating the BusLocation component */}
+      <div className="bus-location-container">
+        <h3>Current Bus Location</h3>
+        <BusLocation /> {/* Displaying the bus location */}
       </div>
     </main>
   );

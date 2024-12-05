@@ -172,24 +172,28 @@ const Lecturer = () => {
                   />
                 </div>
                 <div style={{ flex: "1 1 45%", marginBottom: "15px", paddingRight: "10px" }}>
-                  <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>EPF Number:</label>
-                  <input
-                    type="text"
-                    value={enrollmentNum}
-                    onChange={(e) => setEnrollmentNum(e.target.value)}
-                    required
-                    style={{
-                      width: "100%",
-                      padding: "10px",
-                      borderRadius: "4px",
-                      border: "1px solid #ccc",
-                      fontSize: "16px",
-                    }}
-                    placeholder="Enter enrollment number"
-                  />
+                <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>
+  Enter EPF Number:
+</label>
+<input
+  type="text"
+  value={enrollmentNum}
+  onChange={(e) => setEnrollmentNum(e.target.value)}
+  required
+  maxLength="4" // Limit to a maximum of 4 characters
+  style={{
+    width: "100%",
+    padding: "10px",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+    fontSize: "16px",
+  }}
+  placeholder="Enter enrollment number"
+/>
+
                 </div>
                 <div style={{ flex: "1 1 45%", marginBottom: "15px", paddingRight: "10px" }}>
-  <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>Department:</label>
+  <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>Enter Faculty:</label>
   <select
     value={department}
     onChange={(e) => setDepartment(e.target.value)}
@@ -202,7 +206,7 @@ const Lecturer = () => {
       fontSize: "16px",
     }}
   >
-    <option value="" disabled>Select department</option>
+    <option value="" disabled>Select faculty</option>
     <option value="Computer Science">Faculty Of Computing</option>
     <option value="Mechanical Engineering">Faculty of social Sciences and Build Environment</option>
     <option value="Electrical Engineering">Faculty of Management </option>
@@ -256,21 +260,24 @@ const Lecturer = () => {
                   </select>
                 </div>
                 <div style={{ flex: "1 1 45%", marginBottom: "15px", paddingRight: "10px" }}>
-                  <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>Password:</label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    style={{
-                      width: "100%",
-                      padding: "10px",
-                      borderRadius: "4px",
-                      border: "1px solid #ccc",
-                      fontSize: "16px",
-                    }}
-                    placeholder="Enter password"
-                  />
+                <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>Password:</label>
+<input
+  type="password"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+  required
+  minLength="8" // Minimum length of 8 characters
+  maxLength="8" // Maximum length of 8 characters
+  style={{
+    width: "100%",
+    padding: "10px",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+    fontSize: "16px",
+  }}
+  placeholder="Enter password"
+/>
+
                 </div>
                 <div style={{ flex: "1 1 45%", marginBottom: "15px", paddingRight: "10px" }}>
                   <label style={{ fontWeight: "bold", marginBottom: "5px", color: "#555" }}>Date:</label>
@@ -321,6 +328,7 @@ const Lecturer = () => {
           borderRadius: "4px",
           fontSize: "16px",
           cursor: "pointer",
+          marginRight:"294px"
         }}
       >
         View Lecturers

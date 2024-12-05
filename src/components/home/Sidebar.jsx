@@ -183,6 +183,12 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
             < BsQrCodeScan className="icon" />QR Seats
           </a>
         </li>
+        <li className="sidebar-list-item">  
+          <a href="/childpage_1/Mail">
+            < BsQrCodeScan className="icon" />Emergancy Mail
+          </a>
+        </li>
+
         
       </ul>
     </aside>

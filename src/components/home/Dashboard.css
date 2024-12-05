@@ -215,6 +215,10 @@ body {
 .card-inner > .card_icon {
     font-size: 25px;
 }
+.card
+{
+    background-color: #a6b2b5;
+}
 
 .charts {
     display: grid;
