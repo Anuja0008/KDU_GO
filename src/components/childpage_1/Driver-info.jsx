@@ -1,17 +1,21 @@
-// DriverDetails.js
 import React, { useEffect, useState } from 'react';
 import { db } from '../../firebase/firebase';
 import { collection, getDocs, updateDoc, doc, deleteDoc, addDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, deleteObject, getDownloadURL } from 'firebase/storage';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'; // Loading spinner
 import Sidebar from './Sidebar'; // Import the Sidebar component
+import { FaHome } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const DriverDetails = () => {
+  const navigate = useNavigate();
   const [busData, setBusData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newImage, setNewImage] = useState(null);
-  const [newBusInfo, setNewBusInfo] = useState({ Name: '', RegNo: '', Tel: '' });
+  const [busName, setBusName] = useState('');
+  const [regNo, setRegNo] = useState('');
+  const [tel, setTel] = useState('');
   const [deletingId, setDeletingId] = useState(null); // Track the ID of the driver to be deleted
   const [showConfirmDelete, setShowConfirmDelete] = useState(false); // Track confirmation modal
 
@@ -48,7 +52,7 @@ const DriverDetails = () => {
     if (bus?.ImageUrl) {
       const oldImageRef = ref(storage, bus.ImageUrl);
       try {
-        await deleteObject(oldImageRef);
+        await deleteObject(oldImageRef);  // Delete the old image if a new image is uploaded
       } catch (error) {
         console.error("Error deleting old image: ", error);
       }
@@ -59,9 +63,8 @@ const DriverDetails = () => {
       try {
         await uploadBytes(imageRef, newImage);
         const imageUrl = await getDownloadURL(imageRef);
-        await updateBusDetails(id, { ImageUrl: imageUrl });
+        await updateBusDetails(id, { ImageUrl: imageUrl });  // Update only the ImageUrl field
         setNewImage(null);
-        setNewBusInfo({ Name: '', RegNo: '', Tel: '' });
       } catch (error) {
         console.error("Error uploading new image: ", error);
       }
@@ -71,10 +74,10 @@ const DriverDetails = () => {
   const deleteDriver = async (id) => {
     const driverDoc = doc(db, 'DriverDetails', id);
     try {
-      await deleteDoc(driverDoc); // Delete only the driver document
+      await deleteDoc(driverDoc);  // Delete the driver document
       const updatedBusData = busData.filter(bus => bus.id !== id);
       setBusData(updatedBusData);
-      setShowConfirmDelete(false); // Close the confirmation modal
+      setShowConfirmDelete(false);  // Close the confirmation modal
     } catch (error) {
       console.error("Error deleting driver: ", error);
     }
@@ -83,8 +86,10 @@ const DriverDetails = () => {
   const addNewDriver = async () => {
     try {
       const newDriverRef = await addDoc(collection(db, 'DriverDetails'), {
-        ...newBusInfo,
-        ImageUrl: ''
+        Name: busName,
+        RegNo: regNo,
+        Tel: tel,
+        ImageUrl: ''  // No image initially
       });
 
       if (newImage) {
@@ -94,7 +99,9 @@ const DriverDetails = () => {
         await updateBusDetails(newDriverRef.id, { ImageUrl: imageUrl });
       }
 
-      setNewBusInfo({ Name: '', RegNo: '', Tel: '' });
+      setBusName('');
+      setRegNo('');
+      setTel('');
       setNewImage(null);
       fetchDriverDetails();
     } catch (error) {
@@ -117,6 +124,11 @@ const DriverDetails = () => {
         <header style={styles.header}>
           <div style={styles.headerContent}>
             <h1 style={styles.headerTitle}>Driver Information</h1>
+             <FaHome 
+              style={styles.homeIcon} 
+              onClick={() => navigate('/childpage_1/center-details')} 
+            />
+            
             <button 
               onClick={addNewDriver} 
               style={styles.addDriverButton}
@@ -137,47 +149,80 @@ const DriverDetails = () => {
                 <p style={styles.busDetails}>Reg No: {bus.RegNo}</p>
                 <p style={styles.busDetails}>Tel: {bus.Tel}</p>
 
+                {/* Update Name */}
                 <input 
                   type="text" 
                   placeholder="New Name" 
-                  onChange={(e) => setNewBusInfo({ ...newBusInfo, Name: e.target.value })} 
+                  value={busName} 
+                  onChange={(e) => setBusName(e.target.value)} 
                   style={styles.input}
                 />
+                <button 
+                  onClick={() => busName && updateBusDetails(bus.id, { Name: busName })} 
+                  style={{ ...styles.button, ...styles.updateButton }}
+                >
+                  Update Name
+                </button>
+
+                {/* Update Reg No */}
                 <input 
                   type="text" 
                   placeholder="New Reg No" 
-                  onChange={(e) => setNewBusInfo({ ...newBusInfo, RegNo: e.target.value })} 
+                  value={regNo} 
+                  onChange={(e) => setRegNo(e.target.value)} 
                   style={styles.input}
                 />
+                <button 
+                  onClick={() => regNo && updateBusDetails(bus.id, { RegNo: regNo })} 
+                  style={{ ...styles.button, ...styles.updateButton }}
+                >
+                  Update Reg No
+                </button>
+
+                {/* Update Tel */}
                 <input 
-                  type="text" 
-                  placeholder="New Tel" 
-                  onChange={(e) => setNewBusInfo({ ...newBusInfo, Tel: e.target.value })} 
-                  style={styles.input}
-                />
+  type="text" 
+  placeholder="New Tel" 
+  value={tel} 
+  onChange={(e) => {
+    const value = e.target.value;
+    // Allow only digits and ensure the length doesn't exceed 10
+    if (/^\d{0,10}$/.test(value)) {
+      setTel(value);
+    }
+  }} 
+  maxLength={10}
+  style={styles.input}
+/>
+
+                <button 
+                  onClick={() => tel && updateBusDetails(bus.id, { Tel: tel })} 
+                  style={{ ...styles.button, ...styles.updateButton }}
+                >
+                  Update Tel
+                </button>
+
+                {/* Image upload */}
                 <input 
                   type="file" 
                   accept="image/*" 
                   onChange={(e) => setNewImage(e.target.files[0])} 
                   style={styles.input}
                 />
-                <div style={styles.buttonContainer}>
-                  <button 
-                    onClick={() => {
-                      updateBusDetails(bus.id, newBusInfo);
-                      uploadNewImage(bus.id);
-                    }} 
-                    style={{ ...styles.button, ...styles.updateButton }}
-                  >
-                    Update Driver Info
-                  </button>
-                  <button 
-                    onClick={() => handleDeleteClick(bus.id)} 
-                    style={{ ...styles.button, ...styles.deleteButton }}
-                  >
-                    Delete Driver
-                  </button>
-                </div>
+                <button 
+                  onClick={() => uploadNewImage(bus.id)} 
+                  style={{ ...styles.button, ...styles.updateButton }}
+                >
+                  Upload New Image
+                </button>
+
+                {/* Delete Button */}
+                <button 
+                  onClick={() => handleDeleteClick(bus.id)} 
+                  style={{ ...styles.button, ...styles.deleteButton }}
+                >
+                  Delete Driver
+                </button>
               </div>
             ))}
           </div>
@@ -222,11 +267,17 @@ const styles = {
   },
   addDriverButton: {
     padding: '10px 20px',
-    backgroundColor: '#28a745',
+    backgroundColor: '#FFA500',
     color: '#fff',
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer',
+    
+  },
+  homeIcon: {
+    cursor: 'pointer',
+    fontSize:'30px',
+    marginLeft:'85px'
   },
   topBar: {
     height: '5px',
@@ -258,60 +309,62 @@ const styles = {
   },
   busName: {
     fontSize: '18px',
-    margin: '10px 0',
+    fontWeight: 'bold',
   },
   busDetails: {
     fontSize: '14px',
-    color: '#666',
+    color: '#777',
   },
   input: {
-    margin: '5px 0',
-    padding: '8px',
     width: '100%',
-  },
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
+    padding: '8px',
+    marginBottom: '10px',
+    borderRadius: '4px',
+    border: '1px solid #ccc',
   },
   button: {
-    padding: '8px 12px',
+    padding: '8px 15px',
+    fontSize: '14px',
     cursor: 'pointer',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '4px',
+    marginBottom: '5px',
   },
   updateButton: {
-    backgroundColor: '#007bff',
-    color: '#fff',
+    backgroundColor: '#babfba',
+    color: 'white',
   },
   deleteButton: {
-    backgroundColor: '#dc3545',
-    color: '#fff',
+    backgroundColor: '#f44336',
+    color: 'white',
   },
   modal: {
     position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    padding: '20px',
-    backgroundColor: '#fff',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: '1000',
   },
   confirmButton: {
-    marginRight: '10px',
-    padding: '8px 12px',
+    padding: '10px 20px',
     backgroundColor: '#28a745',
-    color: '#fff',
+    color: 'white',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '4px',
     cursor: 'pointer',
+    marginRight: '10px',
   },
   cancelButton: {
-    padding: '8px 12px',
-    backgroundColor: '#dc3545',
-    color: '#fff',
+    padding: '10px 20px',
+    backgroundColor: '#f44336',
+    color: 'white',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '4px',
     cursor: 'pointer',
   }
 };

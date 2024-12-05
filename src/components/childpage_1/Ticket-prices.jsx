@@ -166,7 +166,7 @@ function TicketPrices() {
       <Sidebar /> {/* Sidebar component */}
       <div style={contentContainerStyle}>
         <header style={headerStyle}>
-          <button onClick={() => navigate('/home')} style={homeButtonStyle}>
+          <button onClick={() => navigate('/childpage_1/center-details')} style={homeButtonStyle}>
             <FaHome />
           </button>
           Ticket Prices

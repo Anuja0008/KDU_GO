@@ -1,35 +1,31 @@
 import React, { useState } from 'react';
-// import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Optional, in case you want to add password visibility toggling
-import emailjs from 'emailjs-com'; // Import the EmailJS SDK
-import Sidebar from './Sidebar'; // Make sure the path is correct for your Sidebar component
+import emailjs from 'emailjs-com';
+import Sidebar from './Sidebar';
 
 const Mail = () => {
   const [receiverEmail, setReceiverEmail] = useState('');
   const [description, setDescription] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // For showing loading state while sending the email
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Handle form submission to send the email via EmailJS
   const handleSendEmail = async () => {
     if (!receiverEmail || !description) {
       alert("Please fill in both fields");
       return;
     }
 
-    setIsLoading(true); // Show loading state
+    setIsLoading(true);
 
-    // Prepare the email template params
     const templateParams = {
       to_email: receiverEmail,
       message: description,
     };
 
     try {
-      // Send the email using EmailJS
       const response = await emailjs.send(
-        'service_skr725o',    // Your EmailJS service ID
-        'template_delfrig',   // Your EmailJS template ID
-        templateParams,       // Template parameters (contains 'to_email' and 'message')
-        'TQNCaWwbyeda2B53Z'   // Your EmailJS user ID
+        'service_skr725o', 
+        'template_delfrig', 
+        templateParams,
+        'TQNCaWwbyeda2B53Z'
       );
       console.log('Email sent successfully:', response);
       alert("Email sent successfully!");
@@ -37,7 +33,7 @@ const Mail = () => {
       console.error('Error sending email:', error);
       alert("Failed to send email. Please try again.");
     } finally {
-      setIsLoading(false); // Hide loading state
+      setIsLoading(false);
       setReceiverEmail('');
       setDescription('');
     }
@@ -45,14 +41,10 @@ const Mail = () => {
 
   return (
     <div style={styles.container}>
-      {/* Sidebar */}
       <Sidebar />
-      
-      {/* Main Content */}
       <div style={styles.content}>
-        <h1>Send Email</h1>
-        
-        {/* Email Form */}
+        <h1 style={styles.title}>Send Email</h1>
+
         <div style={styles.form}>
           <div style={styles.formGroup}>
             <label style={styles.label}>Receiver's Email:</label>
@@ -78,7 +70,7 @@ const Mail = () => {
           </div>
 
           <button onClick={handleSendEmail} style={styles.sendButton} disabled={isLoading}>
-            {isLoading ? 'Sending...' : 'Send'}
+            {isLoading ? <div style={styles.spinner}></div> : 'Send'}
           </button>
         </div>
       </div>
@@ -86,59 +78,88 @@ const Mail = () => {
   );
 };
 
-// Styles for the layout (sidebar, content, and form)
 const styles = {
   container: {
-    display: 'flex', // Use flexbox to display the sidebar and content side by side
-    height: '100vh', // Full viewport height
+    display: 'flex',
+    height: '100vh',
   },
   content: {
-    flexGrow: 1, // Content takes up the remaining space
-    padding: '20px', // Add padding inside the content area
-    backgroundColor: '#f9f9f9', // Light background color for contrast
-    overflowY: 'auto', // Allow content to scroll if needed
+    flexGrow: 1,
+    padding: '30px',
+    backgroundColor: '#fafafa',
+    overflowY: 'auto',
+    fontFamily: 'Poppins, sans-serif',
+  },
+  title: {
+    textAlign: 'center',
+    fontSize: '2rem',
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: '20px',
   },
   form: {
-    marginTop: '20px', // Add space above the form
-    maxWidth: '600px', // Max width for the form
-    margin: '0 auto', // Center the form horizontally
+    marginTop: '20px',
+    maxWidth: '600px',
+    margin: '0 auto',
+    backgroundColor: '#fff',
+    padding: '30px',
+    borderRadius: '8px',
+    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
   },
   formGroup: {
-    marginBottom: '15px', // Space between form fields
+    marginBottom: '20px',
   },
   label: {
-    fontWeight: 'bold',
-    marginBottom: '5px',
+    fontSize: '16px',
+    fontWeight: '600',
     color: '#555',
-    display: 'block',
+    marginBottom: '8px',
   },
   input: {
     width: '100%',
-    padding: '10px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
+    padding: '12px',
+    borderRadius: '6px',
+    border: '1px solid #ddd',
     fontSize: '16px',
-    boxSizing: 'border-box', // Ensure padding is included in width calculation
+    boxSizing: 'border-box',
+    transition: '0.3s ease',
+  },
+  inputFocus: {
+    borderColor: '#4CAF50',
+    boxShadow: '0 0 5px rgba(76, 175, 80, 0.5)',
   },
   textarea: {
     width: '100%',
-    padding: '10px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
+    padding: '12px',
+    borderRadius: '6px',
+    border: '1px solid #ddd',
     fontSize: '16px',
-    height: '150px', // Set a fixed height for the textarea
-    boxSizing: 'border-box', // Ensure padding is included in width calculation
+    height: '150px',
+    boxSizing: 'border-box',
+    transition: '0.3s ease',
   },
   sendButton: {
-    backgroundColor: '#4CAF50', // Green background color
-    color: '#fff', // White text
-    padding: '10px 20px',
+    background: 'linear-gradient(45deg, #4CAF50, #8BC34A)',
+    color: '#fff',
+    padding: '12px 25px',
     border: 'none',
-    borderRadius: '4px',
-    fontSize: '16px',
+    borderRadius: '6px',
+    fontSize: '18px',
     cursor: 'pointer',
     width: '100%',
-    boxSizing: 'border-box',
+    transition: 'background 0.3s ease',
+  },
+  sendButtonHover: {
+    background: 'linear-gradient(45deg, #8BC34A, #4CAF50)',
+  },
+  spinner: {
+    border: '4px solid #f3f3f3',
+    borderTop: '4px solid #3498db',
+    borderRadius: '50%',
+    width: '24px',
+    height: '24px',
+    animation: 'spin 2s linear infinite',
+    margin: '0 auto',
   },
 };
 

@@ -11,10 +11,14 @@ function Notification() {
   const [isAdding, setIsAdding] = useState(false);
 
   const fetchNotices = async () => {
-    const noticesCollection = collection(db, 'Notices');
-    const noticeSnapshot = await getDocs(noticesCollection);
-    const noticesList = noticeSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setNotices(noticesList);
+    try {
+      const noticesCollection = collection(db, 'Notices');
+      const noticeSnapshot = await getDocs(noticesCollection);
+      const noticesList = noticeSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setNotices(noticesList);
+    } catch (error) {
+      console.error('Error fetching notices:', error);
+    }
   };
 
   useEffect(() => {
@@ -23,31 +27,36 @@ function Notification() {
 
   const handleAddNotice = async () => {
     if (notice.trim()) {
-      const noticesCollection = collection(db, 'Notices');
-      const noticeSnapshot = await getDocs(noticesCollection);
-      const newDocId = `doc${noticeSnapshot.docs.length + 1}`;
-
-      const noticeRef = doc(db, 'Notices', newDocId);
-      await setDoc(noticeRef, {
-        notice,
-        date: serverTimestamp(),
-      });
-      setNotice('');
-      fetchNotices();
+      try {
+        const noticesCollection = collection(db, 'Notices');
+        const newNoticeRef = doc(noticesCollection); // Firebase will auto-generate the ID
+        await setDoc(newNoticeRef, {
+          notice,
+          date: serverTimestamp(),
+        });
+        setNotice('');
+        fetchNotices();
+      } catch (error) {
+        console.error('Error adding notice:', error);
+      }
     }
   };
 
   const handleDeleteNotice = async (id) => {
-    const noticeRef = doc(db, 'Notices', id);
-    await deleteDoc(noticeRef);
-    fetchNotices();
+    try {
+      const noticeRef = doc(db, 'Notices', id);
+      await deleteDoc(noticeRef);
+      fetchNotices();
+    } catch (error) {
+      console.error('Error deleting notice:', error);
+    }
   };
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'Arial, sans-serif' }}>
       <Sidebar /> {/* Include the Sidebar here */}
 
-      <div style={{ flex: '1', marginLeft: '250px', paddingTop: '20px' }}> {/* Adjust main content margin for fixed header */}
+      <div style={{ flex: '1', marginLeft: '250px', paddingTop: '20px' }}>
         <main style={{
           display: 'flex',
           flexDirection: 'column',
@@ -66,11 +75,11 @@ function Notification() {
             marginBottom: '10px',
             width: '100%',
           }}>
-             Notices
+            Notices
           </h1>
           
           {/* Full-width separator bar */}
-          <hr style={{ border: '2px solid #FFA500', width: '100%',marginBottom:'20px' }} />
+          <hr style={{ border: '2px solid #FFA500', width: '100%', marginBottom: '20px' }} />
 
           <div style={{
             display: 'flex',
@@ -91,7 +100,7 @@ function Notification() {
               <h2 style={{ textAlign: 'center', fontSize: '28px', margin: '0 0 10px', color: '#344955' }}>
                 Add Notice
               </h2>
-              <hr style={{ margin: '0 0 20px', border: '1px solid #ddd' }} /> {/* Horizontal separator bar */}
+              <hr style={{ margin: '0 0 20px', border: '1px solid #ddd' }} />
 
               <textarea
                 value={notice}
@@ -148,7 +157,7 @@ function Notification() {
               <h2 style={{ textAlign: 'center', fontSize: '28px', margin: '0 0 10px', color: '#344955' }}>
                 Published Notices
               </h2>
-              <hr style={{ margin: '0 0 20px', border: '1px solid #ddd' }} /> {/* Horizontal separator bar */}
+              <hr style={{ margin: '0 0 20px', border: '1px solid #ddd' }} />
 
               {notices.length === 0 ? (
                 <p style={{ textAlign: 'center', color: 'gray' }}>No notices available.</p>
@@ -167,7 +176,7 @@ function Notification() {
                     }}>
                       <div style={{ flex: '1' }}>
                         <p style={{ margin: '0 0 5px', fontWeight: 'bold', color: '#2d3748' }}>{notice}</p>
-                        <small style={{ color: 'gray' }}>{date?.toDate().toLocaleString()}</small>
+                        <small style={{ color: 'gray' }}>{date ? date.toDate().toLocaleString() : 'No date'}</small>
                       </div>
                       <button
                         onClick={() => handleDeleteNotice(id)}

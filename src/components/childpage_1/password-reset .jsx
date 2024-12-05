@@ -53,14 +53,11 @@ const PasswordReset = () => {
       setUsers(users.map(user => (user.id === id ? updatedUser : user)));
       setUpdatedUsers(updatedUsersState); // Update the tracking state
 
-      // Send email only if the password or email is updated
-      if (field === 'password' || field === 'email') {
-        await sendEmailNotification(updatedUser, field === 'password' ? value : updatedUser.password);
-        setEmailStatus('Email sent successfully!'); // Set email status to success
-      }
+      // Do not send email here, only update the user
+      setEmailStatus(null); // Reset the email status after update
     } catch (error) {
       console.error(`Error updating user ${id}:`, error);
-      setEmailStatus('Failed to send email. Please try again.'); // Update status on failure
+      setEmailStatus('Failed to update user. Please try again.'); // Update status on failure
     }
   };
 
@@ -76,6 +73,7 @@ const PasswordReset = () => {
     try {
       const response = await emailjs.send('service_skr725o', 'template_delfrig', templateParams, 'TQNCaWwbyeda2B53Z');
       console.log('Email sent successfully!', response.status, response.text);
+      setEmailStatus('Email sent successfully!'); // Set email status to success
     } catch (error) {
       console.error('Failed to send email:', error);
       setEmailStatus('Failed to send email. Please try again.'); // Update status on failure
@@ -92,7 +90,7 @@ const PasswordReset = () => {
           Password Management
         </h2>
         <hr style={{ margin: '10px 0', border: '3px solid #FFA500', marginBottom: '10px' }} /> {/* Separator bar */}
-        
+
         {emailStatus && (
           <div style={{ marginBottom: '20px', color: emailStatus.includes('successfully') ? 'green' : 'red' }}>
             {emailStatus} {/* Display the email sending status */}
@@ -151,8 +149,10 @@ const PasswordReset = () => {
                   </td>
                   <td style={{ border: '1px solid #131413', padding: '8px' }}>{user.role}</td>
                   <td style={{ border: '1px solid #131413', padding: '8px' }}>
-                    <button style={{ color: updatedUsers[user.id]?.password ? 'green' : 'black' }} 
-                      onClick={() => sendEmailNotification(user, user.password)}>
+                    <button
+                      style={{ color: updatedUsers[user.id]?.password ? 'green' : 'black' }}
+                      onClick={() => sendEmailNotification(user, user.password)}
+                    >
                       Send Email
                     </button>
                   </td>

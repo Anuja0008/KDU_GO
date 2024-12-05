@@ -120,7 +120,7 @@ const BusInformation = () => {
           <div style={styles.iconContainer}>
             <FaHome 
               style={styles.homeIcon} 
-              onClick={() => navigate('/home')} 
+              onClick={() => navigate('/childpage_1/center-details')} 
             />
             <button 
               onClick={() => setIsAddingNewBus(true)} 
@@ -245,6 +245,7 @@ const styles = {
   },
   homeIcon: {
     cursor: 'pointer',
+    fontSize:'30px'
   },
   addBusButton: {
     padding: '10px 15px',

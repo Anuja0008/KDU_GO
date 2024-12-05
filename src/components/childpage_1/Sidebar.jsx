@@ -8,7 +8,8 @@ import {
   BsQrCodeScan, 
   BsGeoAlt,
   BsCalendarWeek,
-  BsBoxArrowRight,
+  // BsBoxArrowRight,
+  BsFillEnvelopeFill,
   BsHouse // Add the house icon for the dashboard
 } from 'react-icons/bs';
 
@@ -29,7 +30,7 @@ const Sidebar = () => {
     { path: '/childpage_1/Details', label: 'Services', icon: <BsFillTelephoneFill /> },
     { path: '/childpage_1/Rollover', label: 'Rollover', icon: <BsCalendarWeek /> },
     { path: '/childpage_1/Qr', label: 'Student QR', icon: <BsQrCodeScan /> },
-    { path: '/login', label: 'Log Out', icon: <BsBoxArrowRight /> },
+    { path: '/childpage_1/Mail', label: 'Emergancy Mail', icon: <BsFillEnvelopeFill /> },
   ];
 
   return (

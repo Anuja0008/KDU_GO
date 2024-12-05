@@ -3,7 +3,7 @@ import { db } from "../../firebase/firebase";
 import { collection, getDocs, deleteDoc, doc, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
-const MessageCard = ({ message, onNavigate, onDelete }) => {
+const MessageCard = ({ message, onNavigate, onDelete, isLatest }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -27,8 +27,22 @@ const MessageCard = ({ message, onNavigate, onDelete }) => {
         transition: "transform 0.2s, box-shadow 0.2s",
         cursor: "pointer",
         position: "relative",
+        borderColor: isLatest ? 'red' : '#007bff', // Add red border for the latest message
       }}
     >
+      {isLatest && (
+        <div
+          style={{
+            position: "absolute",
+            top: "10px",
+            left: "10px",
+            width: "10px",
+            height: "10px",
+            backgroundColor: "red",
+            borderRadius: "50%",
+          }}
+        ></div>
+      )}
       <button
         onClick={() => onNavigate(message.seatNo, message.email, message.date)}
         style={{
@@ -181,6 +195,11 @@ const ROLLOVER = () => {
     }
   };
 
+  // Find the latest message based on the most recent date
+  const latestMessage = messages.reduce((latest, current) => {
+    return new Date(current.date) > new Date(latest.date) ? current : latest;
+  }, messages[0]);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <header
@@ -219,29 +238,19 @@ const ROLLOVER = () => {
                   message={message}
                   onNavigate={handleNavigate}
                   onDelete={handleDelete}
+                  isLatest={message.id === latestMessage.id} // Highlight the latest message
                 />
               ))}
             </div>
           )}
-
-          <div style={{ textAlign: "center", marginTop: "20px" }}>
-            <button
-              onClick={clearMessages}
-              style={{
-                padding: "10px",
-                backgroundColor: "#dc3545",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                fontSize: "16px",
-              }}
-            >
-              Clear All Messages
-            </button>
-          </div>
         </div>
       </main>
+
+      <footer style={{ padding: "10px 20px", backgroundColor: "#263043", color: "#FFA500", textAlign: "center" }}>
+        <button onClick={clearMessages} style={{ backgroundColor: "#FF5733", border: "none", padding: "10px 20px", borderRadius: "5px", color: "white", cursor: "pointer" }}>
+          Clear All Messages
+        </button>
+      </footer>
     </div>
   );
 };
