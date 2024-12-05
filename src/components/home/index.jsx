@@ -10,7 +10,6 @@ import {
 } from 'react-icons/bs';
 import { db } from '../../firebase/firebase';
 import { collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
-import BusLocation from '../childpage_1/Bus-location';  // Import the BusLocation component
 
 function Home() {
   const [seatReservations, setSeatReservations] = useState([]);
@@ -201,12 +200,6 @@ function Home() {
             )}
           </tbody>
         </table>
-      </div>
-
-      {/* Integrating the BusLocation component */}
-      <div className="bus-location-container">
-        <h3>Current Bus Location</h3>
-        <BusLocation /> {/* Displaying the bus location */}
       </div>
     </main>
   );

@@ -70,24 +70,6 @@ const BusLocation = () => {
                 <main style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
                     {location.latitude && location.longitude ? (
                         <>
-                            {/* Attractive Card to Display Location Name */}
-                            <div style={{
-                                border: '1px solid #ccc',
-                                borderRadius: '16px',
-                                padding: '30px',
-                                marginBottom: '30px',
-                                textAlign: 'center',
-                                background: 'linear-gradient(135deg, #f9f9f9, #dcdcdc)',
-                                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                                maxWidth: '400px',
-                                width: '100%',
-                                transition: 'all 0.3s ease-in-out',
-                            }}>
-                                <h2 style={{ fontSize: '24px', color: '#333', fontWeight: '500' }}>{location.name || "Fetching Location..."}</h2>
-                                <p style={{ fontSize: '18px', color: '#666', marginTop: '10px' }}>Latitude: {location.latitude}</p>
-                                <p style={{ fontSize: '18px', color: '#666' }}>Longitude: {location.longitude}</p>
-                            </div>
-                            
                             {/* Google Map */}
                             <LoadScript googleMapsApiKey={googleMapsApiKey}>
                                 <GoogleMap

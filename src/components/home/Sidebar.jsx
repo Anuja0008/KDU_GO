@@ -8,7 +8,8 @@ import {
   // BsInfoCircleFill, 
   BsThreeDotsVertical,// Triple dot icon import
   BsCalendarWeek ,
-  BsGeoAlt 
+  BsGeoAlt ,
+  BsFillEnvelopeFill 
 } from 'react-icons/bs';
 import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage'; // Firebase Storage
 import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore'; // Firestore
@@ -185,7 +186,7 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
         </li>
         <li className="sidebar-list-item">  
           <a href="/childpage_1/Mail">
-            < BsQrCodeScan className="icon" />Emergancy Mail
+            <  BsFillEnvelopeFill  className="icon" />Emergancy Mail
           </a>
         </li>
 
